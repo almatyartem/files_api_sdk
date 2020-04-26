@@ -26,7 +26,9 @@ class FilesApi
 
     /**
      * @param $image
+     * @param null $dir
      * @return string|null
+     * @throws RequestProviderException
      */
     public function uploadImage($image, $dir = null) : ?string
     {
@@ -61,6 +63,7 @@ class FilesApi
      * @param null $dir
      * @param null $stopPhrases
      * @return string|null
+     * @throws RequestProviderException
      */
     public function saveImageByUrl($url, $dir = null, $stopPhrases = null) : ?string
     {
