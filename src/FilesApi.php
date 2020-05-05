@@ -14,25 +14,52 @@ class FilesApi
     public $api;
 
     /**
-     * CoreApi constructor.
+     * FilesApi constructor.
      * @param RequestProvider $provider
-     * @param null $api
+     * @param string $api
      */
-    public function __construct(RequestProvider $provider, $api = null)
+    public function __construct(RequestProvider $provider, string $api)
     {
         $this->provider = $provider;
-        $this->api = $api ?? 'files';
+        $this->api = $api;
     }
 
     /**
-     * @param $image
-     * @param null $dir
+     * @param string $image
+     * @param string $dir
+     * @param string|null $fileName
+     * @param string|null $fileExt
      * @return string|null
      * @throws RequestProviderException
      */
-    public function uploadImage($image, $dir = null) : ?string
+    public function uploadImage(string $image, string $dir, string $fileName = null, string $fileExt = null) : ?string
     {
-        $result = $this->provider->request($this->api , 'post','images/add',  ['image' => $image, 'dir' => $dir]);
+        $result = $this->provider->request($this->api , 'post','images/add',  [
+            'image' => $image,
+            'dir' => $dir,
+            'file_name' => $fileName,
+            'file_ext' => $fileExt
+        ]);
+
+        return $result['code'] ?? null;
+    }
+
+    /**
+     * @param string $url
+     * @param string $dir
+     * @param string|null $fileName
+     * @param string|null $fileExt
+     * @return string|null
+     * @throws RequestProviderException
+     */
+    public function uploadImageByUrl(string $url, string $dir, string $fileName = null, string $fileExt = null) : ?string
+    {
+        $result = $this->provider->request($this->api , 'post','images/add', [
+            'download_url' => $url,
+            'dir' => $dir,
+            'file_name' => $fileName,
+            'file_ext' => $fileExt
+        ]);
 
         return $result['code'] ?? null;
     }
@@ -56,30 +83,5 @@ class FilesApi
             $add[] = 'height='.$height;
         }
         return env('IMAGES_URL') . '/' . $image.($add ? '?'.implode('&', $add) : '');
-    }
-
-    /**
-     * @param $url
-     * @param null $dir
-     * @param null $stopPhrases
-     * @return string|null
-     * @throws RequestProviderException
-     */
-    public function saveImageByUrl($url, $dir = null, $stopPhrases = null) : ?string
-    {
-        $image = file_get_contents($url);
-
-        if($stopPhrases and array_search($stopPhrases, $http_response_header))
-        {
-            return null;
-        }
-        else
-        {
-            $ext = pathinfo($url, PATHINFO_EXTENSION);
-
-            $result = $this->provider->request($this->api ,'post','images/add',  ['image' => base64_encode($image), 'ext' => $ext, 'dir' => $dir]);
-
-            return $result['code'] ?? null;
-        }
     }
 }
