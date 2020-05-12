@@ -67,6 +67,30 @@ class FilesApi
     }
 
     /**
+     * @param array $images
+     * @param string $dir
+     * @param int $width
+     * @param int|null $height
+     * @param string|null $fileName
+     * @param string|null $fileExt
+     * @return string|null
+     * @throws RequestProviderException
+     */
+    public function makeCollage(array $images, string $dir, int $width, int $height = null, string $fileName = null, string $fileExt = null) : ?string
+    {
+        $result = $this->provider->request($this->api , 'post','images/make_collage', [
+            'images' => $images,
+            'width' => $width,
+            'height' => $height,
+            'dir' => $dir,
+            'file_name' => $fileName,
+            'file_ext' => $fileExt
+        ]);
+
+        return $result['code'] ?? null;
+    }
+
+    /**
      * @param $image
      * @param null $width
      * @param null $height
