@@ -1,5 +1,5 @@
 {
-    "name": "apisdk/files_api",
+    "name": "turbodev/files_api",
     "description": "API SDK",
     "repositories":[
         {
@@ -18,7 +18,7 @@
             "src"
         ],
         "psr-4": {
-            "ApiSdk\\": "src/"
+            "FilesApiSdk\\": "src/"
         }
     }
 }
