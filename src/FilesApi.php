@@ -12,19 +12,13 @@ class FilesApi
     public RequestProvider $provider;
 
     /**
-     * @var string
-     */
-    public string $api;
-
-    /**
      * FilesApi constructor.
      * @param RequestProvider $provider
      * @param string $api
      */
-    public function __construct(RequestProvider $provider, string $api)
+    public function __construct(RequestProvider $provider)
     {
         $this->provider = $provider;
-        $this->api = $api;
     }
 
     /**
@@ -69,7 +63,7 @@ class FilesApi
      */
     protected function upload(array $data) : ?string
     {
-        $result = $this->provider->request($this->api.'/images/add', 'post', $data);
+        $result = $this->provider->request('images/add', 'post', $data);
 
         return $result->getContents()['code'] ?? null;
     }
