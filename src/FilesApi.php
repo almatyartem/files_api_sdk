@@ -58,6 +58,18 @@ class FilesApi
     }
 
     /**
+     * @param string $prefix
+     * @param string $dir
+     * @return array|null
+     */
+    public function find(string $prefix, string $dir)
+    {
+        $result = $this->provider->request('images/find/'.$dir.'/'.$prefix);
+
+        return $result->getContents() ?? null;
+    }
+
+    /**
      * @param array $data
      * @return string|null
      */
